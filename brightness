@@ -1,0 +1,16 @@
+#!/bin/bash
+
+USAGE="./brightness up|down"
+
+if [ "$1" == "up" ]; then
+    change="0.1"
+elif [ "$1" == "down" ]; then
+    change="-0.1"
+else
+    echo $USAGE
+    exit 1
+fi
+
+for x in $(xrandr --verbose | grep Brightness -B 5 | grep connected | cut -f1 -d' '); do
+	xrandr --output $x --brightness $(echo $(xrandr --verbose | grep $x -A 5 | grep Brightness | cut -d' ' -f2) + $change | bc)
+done
