@@ -1,0 +1,14 @@
+#!/bin/bash
+
+USAGE="./stock STOCK_SYMBOL|CRYPTO_PAIR [cryptocurrency]"
+
+if [ $# -eq 2 ]; then
+	market=$2
+elif [ $# -eq 1 -a "$1" != "help" ]; then
+	market="stock"
+else
+    echo $USAGE
+    exit 1
+fi
+
+echo -n $1 $( curl -s https://www.marketwatch.com/investing/$market/$1 | grep -E '<meta name="price(Change)?" content="' | cut -d'"' -f4 )

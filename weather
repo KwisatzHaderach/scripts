@@ -1,0 +1,10 @@
+#!/bin/bash
+
+USAGE="./weather [TOWN]"
+
+if [ "$1" == "help" ]; then
+    echo $USAGE
+    exit 1
+fi
+
+curl -s "wttr.in/$1?m" | head -4 | tail -2 | sed -r "s/\x1B\[[0-9;]*[JKmsu]//g" | awk -v ORS=" " '// { for(i=1; i<=NF; i++) { if (match($i, /[-]?[a-zA-Z0-9°]{1,}$/)) {print $i} } }'
